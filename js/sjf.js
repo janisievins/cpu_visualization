@@ -5,30 +5,47 @@ function submit_sjf(e){
 	var p1_burst = parseInt($('#p1_burst').val()),
 	p2_burst = parseInt($('#p2_burst').val()),
 	p3_burst = parseInt($('#p3_burst').val()),
-	p4_burst = parseInt($('#p4_burst').val()),
-	p5_burst = parseInt($('#p5_burst').val()),
-	burst_sum = p1_burst+p2_burst+p3_burst+p4_burst+p5_burst;
+	// p4_burst = parseInt($('#p4_burst').val()),
+	// p5_burst = parseInt($('#p5_burst').val()),
+	burst_sum = p1_burst+p2_burst+p3_burst; //+p4_burst+p5_burst;
 
 
-	var ascending_bursts = new Array();
-		ascending_bursts[p1_burst] = 'p1'
-		ascending_bursts[p2_burst] = 'p2'
-		ascending_bursts[p3_burst] = 'p3'
-		ascending_bursts[p4_burst] = 'p4'
-		ascending_bursts[p5_burst] = 'p5'
+	var pList = [
+	    { id: 'P1', burst: p1_burst, start: 0, end: 0, className: 'style--p1'  },
+	    { id: 'P2', burst: p2_burst, start: 0, end: 0, className: 'style--p2'  },
+	    { id: 'P3', burst: p3_burst, start: 0, end: 0, className: 'style--p3'  },
+	    // { id: 'P4', val: p4_burst, start: null, end: null, className: 'style--p4'  },
+	    // { id: 'P5', val: p5_burst, start: null, end: null, className: 'style--p5'  },
+	];
 
 
-
-	// $(ascending_bursts).each( function(burst) {
-	// 	var prev = $(this).prev();
-	// 	var next = $(this).next();
-
-	// 	console.log(next);
-		
-	// 	console.log( prev.text() + "-" + burst + "-" + next.text() );
-	// });
+	pList.sort(function(a, b) {
+	    return a.burst - b.burst;
+	});
 
 
+	$(pList).each(function(key, val){
+		var prev = pList[key-1]
+		var curr = val;
+
+		if(prev == undefined){
+			curr.start = 0;
+			curr.end = curr.burst;
+
+			console.log(curr);
+			return;
+		}
+		else {
+			curr.start = prev.end;
+			curr.end = prev.end + curr.burst;
+		}
+
+	})
+
+	// console.log(data);
+
+
+	// console.log(pList);
 
 	// var p1_obj = {
 	// 	burst : p1_burst,
@@ -60,31 +77,34 @@ function submit_sjf(e){
 	// 	end   : p4_obj.end + p5_burst
 	// };
 
-	// var options = {
-	//     phases: [
-	//       { start: 0, end: burst_sum, indicatorsEvery: 1, share: 1 },
-	//     ],    
-	//     barHeight: 45,
-	//     fontSize: 16
-	//   };
+	var options = {
+	    phases: [
+	      { start: 0, end: burst_sum, indicatorsEvery: 1, share: 1 },
+	    ],    
+	    barHeight: 45,
+	    fontSize: 16
+	  };
 
- //  var data = [
- //    [
+  // var data_ex = [
+  //   [
 
- //      { id: 'P1', start: p1_obj.start, end: p1_obj.end, className: 'style--p1'},
- //      { id: 'P2', start: p2_obj.start, end: p2_obj.end, className: 'style--p2'},
- //      { id: 'P3', start: p3_obj.start, end: p3_obj.end, className: 'style--p3'},
- //      { id: 'P4', start: p4_obj.start, end: p4_obj.end, className: 'style--p4'},
-	//   { id: 'P5', start: p5_obj.start, end: p5_obj.end, className: 'style--p5'},
+  //     { id: 'P1', start: p1_obj.start, end: p1_obj.end, className: 'style--p1'},
+  //     { id: 'P2', start: p2_obj.start, end: p2_obj.end, className: 'style--p2'},
+  //     { id: 'P3', start: p3_obj.start, end: p3_obj.end, className: 'style--p3'},
+
+  //   ]
+  // ];
 
 
+  var data = [pList];
 
- //    ]
- //  ];
 
- //  var timeline = $('#timeline');
- //    timeline.show();
- //  timeline.simpleTimeline(options, data);    
+	console.log(data);
+	// console.log(data_ex);
+
+  var timeline = $('#timeline');
+    timeline.show();
+  timeline.simpleTimeline(options, data);    
 
 
 
